@@ -1,18 +1,7 @@
 # threejs-checkers
 This project is to practice three.js, It's centered around creating a checkers game.
 
-## Installation
-
-It's required python installation.
-
-```bash
-sudo apt-get update
-sudo apt-get install python3.6
-```
-
 ## How to execute?
-```bash
-python3 -m http.server
-```
-Go to:
-http://localhost:8000/
+After downloading the repository, execute `npm install` once in the root directory to install all dependencies.
+
+You can then start a local server by using `npm start` and open `http://localhost:3000/app/` for testing.
