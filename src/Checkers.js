@@ -5,8 +5,9 @@ import {
 	PerspectiveCamera,
 	Scene,
     Group,
-	WebGLRenderer
+	WebGLRenderer,
 } from 'three';
+// import * as THREE from 'three';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -42,9 +43,26 @@ class App {
 
 		const cube = new Mesh( square, lightsquare );
 		scene.add( board );
+		
+		const loader = new GLTFLoader();
+		loader.load('../models/checker.glb', function ( gltf ) {
+			scene.add(gltf.scene);
+		});
+		
+		// const loader2 = new GLTFLoader();
+		// loader.load( '../checker.glb', function ( gltf ) {
+		//   const checkerMesh = gltf.scene.children.find((child) => child.name === "Checker");
+		//   checkerMesh.scale.set(checkerMesh.scale.x * 0.4, checkerMesh.scale.y * 0.4, checkerMesh.scale.z * 0.4);
+		//   checkerMesh.geometry.computeBoundingBox();
+		//   console.log(checkerMesh.geometry.boundingBox);
+		//   checkerMesh.position.y += checkerMesh.scale.y + 0.05;
+		//   addCheckers(checkerMesh);
+		// }, undefined, function ( error ) {
+	   
+		//   console.error( error );
+	   
+		// } );
 
-		
-		
 		renderer = new WebGLRenderer( { antialias: true } );
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( window.innerWidth, window.innerHeight );
@@ -54,13 +72,14 @@ class App {
 		
 		camera.position.y = 1;
 		camera.position.z = 3;
-
+		
 		const controls = new OrbitControls( camera, renderer.domElement );
 		controls.target.set(4.5, 0 , 4.5)
 		controls.enablePan = false
 		controls.maxPolarAngle = Math.PI / 2;
 		controls.enableDamping = true;
 		controls.update();
+
 		
 		animate();
 		
