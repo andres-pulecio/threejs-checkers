@@ -17,7 +17,7 @@ class App {
 
 	init() {
 
-		camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
+		camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
 		camera.position.z = 4;
 
 		scene = new Scene();
@@ -42,32 +42,43 @@ class App {
 
 		const cube = new Mesh( square, lightsquare );
 		scene.add( board );
+
+		
+		
 		renderer = new WebGLRenderer( { antialias: true } );
 		renderer.setPixelRatio( window.devicePixelRatio );
 		renderer.setSize( window.innerWidth, window.innerHeight );
 		document.body.appendChild( renderer.domElement );
-
+		
 		window.addEventListener( 'resize', onWindowResize, false );
+		
+		camera.position.y = 1;
+		camera.position.z = 3;
 
 		const controls = new OrbitControls( camera, renderer.domElement );
-
+		controls.target.set(4.5, 0 , 4.5)
+		controls.enablePan = false
+		controls.maxPolarAngle = Math.PI / 2;
+		controls.enableDamping = true;
+		controls.update();
+		
 		animate();
-
+		
 	}
-
+	
 }
 
 function onWindowResize() {
-
+	
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-
+	
 	renderer.setSize( window.innerWidth, window.innerHeight );
-
+	
 }
 
 function animate() {
-
+	
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
 
