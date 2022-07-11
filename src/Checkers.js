@@ -11,9 +11,8 @@ import {
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-// import { draughts } from 'draughts/draughts.js';
 
-let camera, scene, renderer, draughts;
+var camera, scene, renderer, cube, controls, draughts, board;
 
 class App {
 
@@ -31,13 +30,22 @@ class App {
 		const darksquare = new MeshBasicMaterial({color: 0x6A4236});
         const board = new Group();
         
+		let squareNumber = 1;
         for (let x = 0; x < 10; x++) {
             for (let z = 0; z < 10; z++) {
                 let cube;
                 if (z % 2 == 0) {
                     cube = new Mesh(square, x % 2 == 0 ? lightsquare : darksquare);
+					if(x % 2 != 0){
+						cube.userData.squareNumber = squareNumber;
+						squareNumber ++;
+					}
                 } else {
                     cube = new Mesh(square, x % 2 == 0 ? darksquare : lightsquare);
+					if(x % 2 == 0){
+						cube.userData.squareNumber = squareNumber;
+						squareNumber ++;
+					}
                 }   
                 cube.position.set(x, 0, z);
                 board.add(cube);
@@ -54,6 +62,7 @@ class App {
 			checkerMesh.scale.set(checkerMesh.scale.x * 0.4, checkerMesh.scale.y * 0.4, checkerMesh.scale.z * 0.4);
 			checkerMesh.position.y += checkerMesh.scale.y - 0.3;
 			scene.add(checkerMesh);
+			// addCheckers(checkerMesh);
 		});
 
 		renderer = new WebGLRenderer( { antialias: true } );
@@ -100,8 +109,35 @@ function animate() {
 
 }
 
-function addCheckers() {
-	
+function positionForSquare(square){
+	const found = board.children.find((child) => child.userData.squareNumber == square);
+	if(found)
+		return found.position;
+	return null;
 }
+
+function addCheckers(checkerMesh) {
+	console.log(draughts.fen());
+   
+	for (let i = 0; i < 1; i++) {
+		let pieceOn = draughts.get(i);
+		const piece = checkerMesh.clone(true);
+		const squarePosition = positionForSquare(i);
+   
+	  if (pieceOn === 'b') {
+		piece.material = new MeshStandardMaterial({color:0x222222});
+		piece.userData.color = 'b';
+		piece.userData.currentSquare = i;
+		piece.position.set(squarePosition.x, piece.position.y, squarePosition.z);
+		scene.add(piece);
+	} else if (pieceOn === 'w') {
+		piece.material = new MeshStandardMaterial({color:0xEEEEEE});
+		piece.userData.color = 'w';
+		piece.userData.currentSquare = i;
+		piece.position.set(squarePosition.x, piece.position.y, squarePosition.z);
+		scene.add(piece);
+	  }
+	}
+  }
 
 export default App;
