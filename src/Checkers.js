@@ -6,6 +6,7 @@ import {
 	Scene,
     Group,
 	WebGLRenderer,
+	PointLight
 } from 'three';
 // import * as THREE from 'three';
 
@@ -45,23 +46,14 @@ class App {
 		scene.add( board );
 		
 		const loader = new GLTFLoader();
-		loader.load('../models/checker.glb', function ( gltf ) {
-			scene.add(gltf.scene);
+		loader.load('../models/checker.glb', 
+		(gltf) => {
+			const checkerMesh = gltf.scene;
+			// checkerMesh.scale.set( 0.4, 0.4, 0.4);
+			checkerMesh.scale.set(checkerMesh.scale.x * 0.4, checkerMesh.scale.y * 0.4, checkerMesh.scale.z * 0.4);
+			checkerMesh.position.y += checkerMesh.scale.y - 0.3;
+			scene.add(checkerMesh);
 		});
-		
-		// const loader2 = new GLTFLoader();
-		// loader.load( '../checker.glb', function ( gltf ) {
-		//   const checkerMesh = gltf.scene.children.find((child) => child.name === "Checker");
-		//   checkerMesh.scale.set(checkerMesh.scale.x * 0.4, checkerMesh.scale.y * 0.4, checkerMesh.scale.z * 0.4);
-		//   checkerMesh.geometry.computeBoundingBox();
-		//   console.log(checkerMesh.geometry.boundingBox);
-		//   checkerMesh.position.y += checkerMesh.scale.y + 0.05;
-		//   addCheckers(checkerMesh);
-		// }, undefined, function ( error ) {
-	   
-		//   console.error( error );
-	   
-		// } );
 
 		renderer = new WebGLRenderer( { antialias: true } );
 		renderer.setPixelRatio( window.devicePixelRatio );
@@ -70,6 +62,10 @@ class App {
 		
 		window.addEventListener( 'resize', onWindowResize, false );
 		
+		const light= new PointLight(0xffffff,2,200);
+        light.position.set(4.5,10,4.5);
+		scene.add(light);
+
 		camera.position.y = 1;
 		camera.position.z = 3;
 		
