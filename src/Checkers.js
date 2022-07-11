@@ -8,16 +8,18 @@ import {
 	WebGLRenderer,
 	PointLight
 } from 'three';
-// import * as THREE from 'three';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+// import { draughts } from 'draughts/draughts.js';
 
-let camera, scene, renderer;
+let camera, scene, renderer, draughts;
 
 class App {
 
 	init() {
+		draughts = new Draughts();
+		console.log(draughts.fen());
 
 		camera = new PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 1000 );
 		camera.position.z = 4;
@@ -49,7 +51,6 @@ class App {
 		loader.load('../models/checker.glb', 
 		(gltf) => {
 			const checkerMesh = gltf.scene;
-			// checkerMesh.scale.set( 0.4, 0.4, 0.4);
 			checkerMesh.scale.set(checkerMesh.scale.x * 0.4, checkerMesh.scale.y * 0.4, checkerMesh.scale.z * 0.4);
 			checkerMesh.position.y += checkerMesh.scale.y - 0.3;
 			scene.add(checkerMesh);
@@ -97,6 +98,10 @@ function animate() {
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera );
 
+}
+
+function addCheckers() {
+	
 }
 
 export default App;
